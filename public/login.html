@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="/__/firebase/7.5.0/firebase-app.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+  	integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  	crossorigin="anonymous"></script>
+    <!-- include only the Firebase features as you need -->
+    <script src="/__/firebase/7.5.0/firebase-auth.js"></script>
+    <script src="/__/firebase/7.5.0/firebase-database.js"></script>
+    <script src="/__/firebase/7.5.0/firebase-messaging.js"></script>
+    <script src="/__/firebase/7.5.0/firebase-storage.js"></script>
+    <!-- initialize the SDK after all desired features are loaded -->
+	<script src="/__/firebase/init.js"></script>
+	<title>Login Page</title>
+</head>
+<body>
+	<input type="button" id="btnLogin" value="Login with Google">
+	<script>
+		$('#btnLogin').on('click',loginClicked);
+		function loginClicked(){
+			var provider = new firebase.auth.GoogleAuthProvider();
+			firebase.auth().signInWithPopup(provider).then(result=>{
+				if(result != null){
+					window.location.replace('index.html');
+				}
+			})
+		}
+	</script>
+</body>
+</html>
