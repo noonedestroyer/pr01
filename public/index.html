@@ -31,6 +31,8 @@
 	<input type="button" value="new Person" onclick="addPerson()">
 	<h1>All Persons</h1>
 	<ul id="listPersons">
+	<h1>All Facts</h1>
+	<ul id="listFacts"></ul>	
 
 	</ul>
 	<script>
@@ -44,13 +46,36 @@
 					name = user.displayName;
   					email = user.email;
 					$('#status').html(`you have logged in as ${name} and ${email}`);
+					// check admin or not
+					user.getIdTokenResult(true).then((idTokenResult) => {
+						//confirm user is admin or not
+						if (!!idTokenResult.claims.admin){
+							$('#status').append("Welcome, admin");
+						}
+					})
+
 				} else {
 					$('#status').html('you have NOT logged in');
 				}
 			});
 		}
+
+
 		//refer to the database
 		const dbRef = firebase.database().ref();
+		dbRef.child('facts').on('value', snap => {
+			fillList(snap);
+		})
+		function fillList(snap) {
+			$('#listPersons').empty();
+			snap.forEach(snapChild => {
+				var name = snapChild.child('name').val();
+				var personKey = snapChild.key;
+				var hr = '<a href="#" onclick="remove(this)" key="' + personKey + '">'
+					+ name + '</a>';
+				$('#listPersons').append('<li>' + hr + '</li>');
+			});
+		}
 		dbRef.child('allPerson').on('value', snap => {
 			fillList(snap);
 		})
